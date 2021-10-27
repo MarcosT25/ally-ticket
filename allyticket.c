@@ -19,10 +19,10 @@ int main()
 {
   Filme dunha;
   Filme *dunhacptr = &dunha;
-  char nome[30] = "dunha";
+  char nome[30] = "Duna";
   dunha.nome = nome;
-  dunha.classificacao = 14;
-  char categoria[20] = "terror";
+  dunha.classificacao = 0;
+  char categoria[20] = "Sci-Fi";
   dunha.categoria = categoria;
   create(dunhacptr);
 }
@@ -31,7 +31,7 @@ void create(Filme *nomeFilme)
 {
   FILE *file;
   file = fopen("allyticket.txt", "a");
-  fprintf(file, "%s\n%d\n%s", nomeFilme->nome, nomeFilme->classificacao, nomeFilme->categoria);
+  fprintf(file, "\nNome: %s\nClassificacao: %d\nCategoria: %s", nomeFilme->nome, nomeFilme->classificacao, nomeFilme->categoria);
   fclose(file);
 }
 void read()

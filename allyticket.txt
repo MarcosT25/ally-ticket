@@ -1,3 +1,13 @@
-dunha
-14
-terror
+
+Duna
+0
+Sci-Fi
+Duna
+0
+Sci-Fi
+Duna
+0
+Sci-Fi
+Nome: Duna
+Classificacao: 0
+Categoria: Sci-Fi
