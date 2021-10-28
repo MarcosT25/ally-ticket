@@ -46,9 +46,11 @@ void read(Filme *nomeFilme)
     printf("Arquivo nao encontrado.\n");
     return;
   }
-
-  fscanf(file, "%s %d %s", &nomeFilme->nome, &nomeFilme->classificacao, &nomeFilme->categoria);
-  printf("\nNome: %s\nClassificacao: %d\nCategoria: %s", nomeFilme->nome, nomeFilme->classificacao, nomeFilme->categoria);
+  char nome[52];
+  int classificacao;
+  char categoria[52];
+  fscanf(file, "%s %d %s", &nome, &classificacao, &categoria);
+  printf("Nome: %s\nClassificacao: %d\nCategoria: %s\n", nome, classificacao, categoria);
   
   fclose(file);
 }
