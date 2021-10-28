@@ -11,7 +11,7 @@ typedef struct filme Filme;
 
 void create(Filme *nomeFilme);
 
-void read();
+void read(Filme *nomefilme);
 void update();
 void delete ();
 
@@ -34,7 +34,7 @@ void create(Filme *nomeFilme)
   fprintf(file, "\nNome: %s\nClassificacao: %d\nCategoria: %s", nomeFilme->nome, nomeFilme->classificacao, nomeFilme->categoria);
   fclose(file);
 }
-void read()
+void read(Filme *nomefilme)
 {
 }
 
