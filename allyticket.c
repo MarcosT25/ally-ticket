@@ -5,7 +5,7 @@
 struct filme
 {
   char *nome;
-  int classificacao;
+  char *classificacao;
   char *categoria;
 };
 
@@ -23,7 +23,8 @@ int main()
   Filme *dunhacptr = &dunha;
   char nome[30] = "Duna";
   dunha.nome = nome;
-  dunha.classificacao = 0;
+  char classificacao[20] = "14";
+  dunha.classificacao = classificacao;
   char categoria[20] = "Sci-Fi";
   dunha.categoria = categoria;
   //create(dunhacptr);
@@ -34,7 +35,7 @@ void create(Filme *nomeFilme)
 {
   FILE *file;
   file = fopen("allyticket.txt", "a");
-  fprintf(file, "\nNome: %s\nClassificacao: %d\nCategoria: %s", nomeFilme->nome, nomeFilme->classificacao, nomeFilme->categoria);
+  fprintf(file, "Nome: %s\nClassificacao: %s\nCategoria: %s\n", nomeFilme->nome, nomeFilme->classificacao, nomeFilme->categoria);
   fclose(file);
 }
 void read(Filme *nomeFilme)
@@ -47,9 +48,15 @@ void read(Filme *nomeFilme)
     return;
   }
 
-  fscanf(file, "%s %d %s", &nomeFilme->nome, &nomeFilme->classificacao, &nomeFilme->categoria);
-  printf("\nNome: %s\nClassificacao: %d\nCategoria: %s", nomeFilme->nome, nomeFilme->classificacao, nomeFilme->categoria);
-  
+  char nome[52];
+  char classificacao[52];
+  char categoria[52];
+
+  fgets(nome, sizeof(nome), file);
+  fgets(classificacao, sizeof(classificacao), file);
+  fgets(categoria, sizeof(categoria), file);
+
+  printf("%s%s%s", nome, classificacao, categoria);
   fclose(file);
 }
 

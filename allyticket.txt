@@ -1,13 +1,3 @@
-
-Duna
-0
-Sci-Fi
-Duna
-0
-Sci-Fi
-Duna
-0
-Sci-Fi
 Nome: Duna
-Classificacao: 0
+Classificacao: 14
 Categoria: Sci-Fi
