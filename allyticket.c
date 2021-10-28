@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 struct filme
 {
   char *nome;
@@ -11,7 +13,7 @@ typedef struct filme Filme;
 
 void create(Filme *nomeFilme);
 
-void read(Filme *nomefilme);
+void read(Filme *nomeFilme);
 void update();
 void delete ();
 
@@ -24,7 +26,8 @@ int main()
   dunha.classificacao = 0;
   char categoria[20] = "Sci-Fi";
   dunha.categoria = categoria;
-  create(dunhacptr);
+  //create(dunhacptr);
+  read(dunhacptr);
 }
 
 void create(Filme *nomeFilme)
@@ -34,8 +37,20 @@ void create(Filme *nomeFilme)
   fprintf(file, "\nNome: %s\nClassificacao: %d\nCategoria: %s", nomeFilme->nome, nomeFilme->classificacao, nomeFilme->categoria);
   fclose(file);
 }
-void read(Filme *nomefilme)
+void read(Filme *nomeFilme)
 {
+  FILE *file;
+  file = fopen("allyticket.txt", "r");
+
+  if (file == NULL){
+    printf("Arquivo nao encontrado.\n");
+    return;
+  }
+
+  fscanf(file, "%s %d %s", &nomeFilme->nome, &nomeFilme->classificacao, &nomeFilme->categoria);
+  printf("\nNome: %s\nClassificacao: %d\nCategoria: %s", nomeFilme->nome, nomeFilme->classificacao, nomeFilme->categoria);
+  
+  fclose(file);
 }
 
 void delete ()
