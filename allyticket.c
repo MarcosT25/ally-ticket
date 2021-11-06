@@ -127,7 +127,6 @@ void update(int filmeIndex, int filmeCampo)
     printf("Digite o novo nome do filme: ");
     scanf("%s", &newLine);
     strcat(formatNome, newLine);
-    strcat(formatNome, "\n");
     while((fgets(linhaAntiga, 100, file)) != NULL) {
       count++;
       if (count == line) {
@@ -140,10 +139,9 @@ void update(int filmeIndex, int filmeCampo)
   }
   if(filmeCampo == 2) {
     char formatClass[102] = "Classificação: ";
-    printf("Digite o novo nome do filme: ");
+    printf("Digite a nova classificação do filme: ");
     scanf("%s", &newLine);
     strcat(formatClass, newLine);
-    strcat(formatClass, "\n");
     while((fgets(linhaAntiga, 100, file)) != NULL) {
       count++;
       if (count == line) {
@@ -156,10 +154,9 @@ void update(int filmeIndex, int filmeCampo)
   }
   if(filmeCampo == 3) {
     char formatCategoria[102] = "Categoria: ";
-    printf("Digite o novo nome do filme: ");
+    printf("Digite a nova categoria do filme: ");
     scanf("%s", &newLine);
     strcat(formatCategoria, newLine);
-    strcat(formatCategoria, "\n");
     while((fgets(linhaAntiga, 100, file)) != NULL) {
       count++;
       if (count == line) {
