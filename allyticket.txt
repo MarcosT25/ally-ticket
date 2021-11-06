@@ -1,3 +1,6 @@
 Nome: Duna
 Classificacao: 14
 Categoria: Sci-Fi
+Nome: Morbius
+Classificacao: 12
+Categoria: Ação
