@@ -14,7 +14,7 @@ typedef struct filme Filme;
 int tamanho_arquivo();
 void create(Filme *nomeFilme);
 void read();
-void update();
+void update(int filmeIndex, int filmeCampo);
 void delete ();
 
 int main()
@@ -42,6 +42,17 @@ int main()
     }
     if (escolha == 2) {
       read();
+    }
+    if (escolha == 3) {
+      printf("Os filmes disponíveis para edição e seus respectivos números são:\n");
+      read();
+      printf("Digite o número do filme que deseja editar: ");
+      int escolhaFilme;
+      scanf("%d", &escolhaFilme);
+      printf("Qual campo deseja modificar?\n1 - Nome\n2 - Classificação\n3 - Categoria\nEscolha: ");
+      int escolhaCampo;
+      scanf("%d", &escolhaCampo);
+      update(escolhaFilme, escolhaCampo);
     }
     printf("Escolha o que deseja fazer:\n1 - Adicionar um filme à lista;\n2 - Visualizar todos os filmes\n3 - Editar um filme\n0 - Sair\nEscolha: ");
     scanf("%d", &escolha);
@@ -83,69 +94,91 @@ void read()
   char nome[52];
   char classificacao[52];
   char categoria[52];
+  int filmeIndex = 0;
 
   while(!feof(file)) {
     fgets(nome, sizeof(nome), file);
     fgets(classificacao, sizeof(classificacao), file);
     fgets(categoria, sizeof(categoria), file);
-
+    filmeIndex++;
+    printf("Filme número %d:\n", filmeIndex);
     printf("%s%s%s", nome, classificacao, categoria);
   }  
   printf("\n");
   fclose(file);
 }
 
-void delete ()
-{
-}
-
-void update(Filme *nomeFilme)
+void update(int filmeIndex, int filmeCampo)
 {
   FILE *file;
-  file = fopen("allyticket.txt", "r+");
- 
-  if(file==NULL){
-    printf("Filme inexistente.\n");
-    return;
-  }
-  
-  char nome[30], classificacao[20], categoria[20];
-  int escolha;
-  char new_nome[30], new_classificacao[20], new_categoria[20];
- 
-  fgets(nome, sizeof(nome), file); fflush(stdin);
-  fgets(classificacao, sizeof(classificacao), file); fflush(stdin);
-  fgets(categoria, sizeof(categoria), file); fflush(stdin);
- 
-  int tam_nome=strlen(nome)+strlen(classificacao)+strlen(categoria)+2;
-  int tam_class=strlen(classificacao)+strlen(categoria)+1;
-  int tam_cat=strlen(categoria);
- 
-  printf("%s%s%s\n", nome, classificacao, categoria);
-  printf("\nDeseja editar:\n 1. Nome\n 2. Classificacao\n 3. Categoria\n");
- 
-  scanf("%d", &escolha);
- 
-  if(escolha==1){
-    printf("Insira o novo nome:\n");
-    fflush(stdin);
-    scanf("%s", &new_nome);
-    fseek(file, -tam_nome, SEEK_CUR);
-    fprintf(file, "Nome: %s\n%s%s", new_nome, classificacao, categoria);
+  FILE *tempFile;
+
+  int line = (filmeIndex - 1)*3 + filmeCampo;
+
+  char linhaAntiga[102];
+  char newLine[102];
+  int count = 0;
+
+  file = fopen("allyticket.txt", "r");
+  tempFile = fopen("replace.tmp", "w");
+
+  if(filmeCampo == 1) {
+    char formatNome[102] = "Nome: ";
+    printf("Digite o novo nome do filme: ");
+    scanf("%s", &newLine);
+    strcat(formatNome, newLine);
+    strcat(formatNome, "\n");
+    while((fgets(linhaAntiga, 100, file)) != NULL) {
+      count++;
+      if (count == line) {
+        fputs(formatNome, tempFile);
+      }
+      else {
+        fputs(linhaAntiga, tempFile);
+      }
     }
-  if(escolha==2){
-    printf("Insira a nova classificacao:\n");
-    fflush(stdin);
-    scanf("%s", &new_classificacao);
-    fseek(file, -tam_class, SEEK_CUR);
-    fprintf(file, "Classificacao: %s\n%s", new_classificacao, categoria);
   }
-  if(escolha==3){
-    printf("Insira a nova categoria:\n");
-    fflush(stdin);
-    scanf("%s", &new_categoria);
-    fseek(file, -tam_cat, SEEK_CUR);
-    fprintf(file, "Categoria: %s", new_categoria);
+  if(filmeCampo == 2) {
+    char formatClass[102] = "Classificação: ";
+    printf("Digite o novo nome do filme: ");
+    scanf("%s", &newLine);
+    strcat(formatClass, newLine);
+    strcat(formatClass, "\n");
+    while((fgets(linhaAntiga, 100, file)) != NULL) {
+      count++;
+      if (count == line) {
+        fputs(formatClass, tempFile);
+      }
+      else {
+        fputs(linhaAntiga, tempFile);
+      }
+    }
   }
+  if(filmeCampo == 3) {
+    char formatCategoria[102] = "Categoria: ";
+    printf("Digite o novo nome do filme: ");
+    scanf("%s", &newLine);
+    strcat(formatCategoria, newLine);
+    strcat(formatCategoria, "\n");
+    while((fgets(linhaAntiga, 100, file)) != NULL) {
+      count++;
+      if (count == line) {
+        fputs(formatCategoria, tempFile);
+      }
+      else {
+        fputs(linhaAntiga, tempFile);
+      }
+    }
+  }
+
+fclose(tempFile);
 fclose(file);
+
+remove("allyticket.txt");
+rename("replace.tmp", "allyticket.txt");
+
+}
+
+void delete ()
+{
 }
