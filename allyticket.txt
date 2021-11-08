@@ -1,6 +1,9 @@
-Nome: Marcos
-Classificação: 16
+Nome: Duna
+Classificacao: 16
 Categoria: Sci-Fi
 Nome: Morbius
-Classificacao: 12
-Categoria: terror
+Classificacao: 16
+Categoria: Ação
+Nome: Hush
+Classificacao: 16
+Categoria: Terror
