@@ -4,13 +4,13 @@
 
 * Bruno Fregnani - 254179
 * Camille Bobsin - 254186
-* Giulia Tote- 254237
-* João Rodrigo Sato - 254267
+* Giulia Tote - 254237
+* João Rodrigo Martins - 254267
 * Marcos Takahashi - 254311
 
 ## Sistema de venda de ingressos
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As funções da versão 1.0 do sistema entregue no dia 07/11/2021 permitem a criação, visualização, atualização e exclusão de filmes a um registro de arquivos. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As funções da versão 1.0 do sistema entregue no dia 07/11/2021 permitem a criação, visualização, atualização e exclusão de filmes em um registro de arquivos. 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A versão final 2.0 a ser entregue no dia 24/11/2021 contemplarão o CRUD de administração de sessões e ingressos do usuário. 
 
