@@ -189,15 +189,14 @@ void updateFilme(int filmeIndex, int filmeCampo)
   tempFile = fopen("replace.tmp", "w");
 
   if(filmeCampo == 1) {
-    char formatNome[102] = "Nome: ";
     printf("Digite o novo nome do filme: ");
     while ( getchar() != '\n' );
     scanf("%[^\n]", newLine);
-    strcat(formatNome, newLine);
+    strcat(newLine, "\n");
     while((fgets(linhaAntiga, 100, file)) != NULL) {
       count++;
       if (count == line) {
-        fputs(formatNome, tempFile);
+        fputs(newLine, tempFile);
       }
       else {
         fputs(linhaAntiga, tempFile);
@@ -205,15 +204,14 @@ void updateFilme(int filmeIndex, int filmeCampo)
     }
   }
   if(filmeCampo == 2) {
-    char formatClass[102] = "Classificação: ";
     printf("Digite a nova classificação do filme: ");
     while ( getchar() != '\n' );
     scanf("%[^\n]", newLine);
-    strcat(formatClass, newLine);
+    strcat(newLine, "\n");
     while((fgets(linhaAntiga, 100, file)) != NULL) {
       count++;
       if (count == line) {
-        fputs(formatClass, tempFile);
+        fputs(newLine, tempFile);
       }
       else {
         fputs(linhaAntiga, tempFile);
@@ -221,15 +219,14 @@ void updateFilme(int filmeIndex, int filmeCampo)
     }
   }
   if(filmeCampo == 3) {
-    char formatCategoria[102] = "Categoria: ";
     printf("Digite a nova categoria do filme: ");
     while ( getchar() != '\n' );
     scanf("%[^\n]", newLine);
-    strcat(formatCategoria, newLine);
+    strcat(newLine, "\n");
     while((fgets(linhaAntiga, 100, file)) != NULL) {
       count++;
       if (count == line) {
-        fputs(formatCategoria, tempFile);
+        fputs(newLine, tempFile);
       }
       else {
         fputs(linhaAntiga, tempFile);
@@ -237,15 +234,14 @@ void updateFilme(int filmeIndex, int filmeCampo)
     }
   }
   if(filmeCampo == 4) {
-    char formatDuracao[102] = "Duração: ";
     printf("Digite a nova duração do filme: ");
     while ( getchar() != '\n' );
     scanf("%[^\n]", newLine);
-    strcat(formatDuracao, newLine);
+    strcat(newLine, "\n");
     while((fgets(linhaAntiga, 100, file)) != NULL) {
       count++;
       if (count == line) {
-        fputs(formatDuracao, tempFile);
+        fputs(newLine, tempFile);
       }
       else {
         fputs(linhaAntiga, tempFile);
