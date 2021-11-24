@@ -6,8 +6,7 @@
 #define MOVIE_FILE "filmes.txt"
 #define SESSION_FILE "sessoes.txt"
 
-struct filme
-{
+struct filme {
   char *nome;
   char *classificacao;
   char *categoria;
@@ -16,6 +15,15 @@ struct filme
 
 typedef struct filme Filme;
 
+struct sessao {
+  char *filme;
+  char *sala;
+  char *lugares;
+  char *horario;
+};
+
+typedef struct sessao Sessao;
+
 int tamanhoArquivo();
 void createFilme(Filme *nomeFilme);
 void readFilme();
@@ -23,8 +31,7 @@ void updateFilme(int filmeIndex, int filmeCampo);
 void deleteFilme(int filmeIndex);
 void readSession();
 
-int main()
-{
+int main() {
   int escolhaPerfil;
   int escolhaAcaoCliente;
   int escolhaAcaoFuncionario;
@@ -168,7 +175,7 @@ void readFilme() {
     filmeIndex++;
     duracao[strcspn(duracao, "\n")] = 0;
     printf("Filme número %d:\n", filmeIndex);
-    printf("Nome: %sClassificação: %sCategoria: %sDuração: %smin\n", nome, classificacao, categoria, duracao);
+    printf("Nome: %sClassificação: %sCategoria: %sDuração: %s min\n", nome, classificacao, categoria, duracao);
   }  
   printf("\n");
   fclose(file);
@@ -292,15 +299,17 @@ void readSession() {
   char filme[52];
   char sala[5];
   char lugares[5];
+  char horario[12];
   int sessaoIndex = 0;
 
   while(!feof(file)) {
     fgets(filme, sizeof(filme), file);
     fgets(sala, sizeof(sala), file);
     fgets(lugares, sizeof(lugares), file);
+    fgets(horario, sizeof(horario), file);
     sessaoIndex++;
     printf("Sessão número %d:\n", sessaoIndex);
-    printf("%sSala número: %sAssentos disponíveis: %s", filme, sala, lugares);
+    printf("%sSala número: %sAssentos disponíveis: %sHorário: %s", filme, sala, lugares, horario);
   }  
   printf("\n");
   fclose(file);
