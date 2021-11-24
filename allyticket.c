@@ -244,7 +244,9 @@ void updateFilme(int filmeIndex, int filmeCampo)
     printf("Digite a nova duração do filme: ");
     while ( getchar() != '\n' );
     scanf("%[^\n]", newLine);
-    strcat(newLine, "\n");
+    if (line != tamanhoArquivo()) {
+      strcat(newLine, "\n");
+    }
     while((fgets(linhaAntiga, 100, file)) != NULL) {
       count++;
       if (count == line) {
