@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+
 struct filme
 {
   char *nome;
@@ -11,11 +12,11 @@ struct filme
 
 typedef struct filme Filme;
 
-int tamanho_arquivo();
-void create(Filme *nomeFilme);
-void read();
-void update(int filmeIndex, int filmeCampo);
-void delete(int filmeIndex);
+int tamanhoArquivo();
+void createFilme(Filme *nomeFilme);
+void read(char *arquivo);
+void updateFilme(int filmeIndex, int filmeCampo);
+void deleteFilme(int filmeIndex);
 
 int main()
 {
@@ -40,30 +41,30 @@ int main()
       while ( getchar() != '\n' );
       scanf("%[^\n]", categoria);
       filme.categoria = categoria;
-      Filme *filme_ptr = &filme;
-      create(filme_ptr);
+      Filme *filmePtr = &filme;
+      createFilme(filmePtr);
     }
     else if (escolha == 2) {
-      read();
+      read("allyticket.txt");
     }
     else if (escolha == 3) {
       printf("Os filmes disponíveis para edição e seus respectivos números são:\n");
-      read();
+      read("allyticket.txt");
       printf("Digite o número do filme que deseja editar: ");
       int escolhaFilme;
       scanf("%d", &escolhaFilme);
       printf("Qual campo deseja modificar?\n1 - Nome\n2 - Classificação\n3 - Categoria\nEscolha: ");
       int escolhaCampo;
       scanf("%d", &escolhaCampo);
-      update(escolhaFilme, escolhaCampo);
+      updateFilme(escolhaFilme, escolhaCampo);
     }
     else if (escolha == 4) {
       printf("Os filmes disponíveis para exclusão e seus respectivos números são:\n");
-      read();
+      read("allyticket.txt");
       printf("Digite o número do filme que deseja excluir: ");
       int escolhaFilme;
       scanf("%d", &escolhaFilme);
-      delete(escolhaFilme);
+      deleteFilme(escolhaFilme);
     }
     else {
       printf("Nenhuma ação corresponde ao valor inserido, por favor selecione uma ação válida.\n");
@@ -73,7 +74,7 @@ int main()
   }
 }
 
-int tamanho_arquivo() {
+int tamanhoArquivo() {
   char linha[102];
   int tamanho = 0;
   FILE *file;
@@ -85,20 +86,20 @@ int tamanho_arquivo() {
   return tamanho;
 }
 
-void create(Filme *nomeFilme)
+void createFilme(Filme *nomeFilme)
 {
   FILE *file;
   file = fopen("allyticket.txt", "a");
-  if (tamanho_arquivo() > 2) { //caso já exista algum filme no arquivo, insere um \n antes de inserir o filme
+  if (tamanhoArquivo() > 2) { //caso já exista algum filme no arquivo, insere um \n antes de inserir o filme
     fprintf(file, "\n");
   }
   fprintf(file, "Nome: %s\nClassificacao: %s\nCategoria: %s", nomeFilme->nome, nomeFilme->classificacao, nomeFilme->categoria);
   fclose(file);
 }
-void read()
+void read(char *arquivo)
 {
   FILE *file;
-  file = fopen("allyticket.txt", "r");
+  file = fopen(arquivo, "r");
 
   if (file == NULL){
     printf("Arquivo nao encontrado.\n");
@@ -122,7 +123,7 @@ void read()
   fclose(file);
 }
 
-void update(int filmeIndex, int filmeCampo)
+void updateFilme(int filmeIndex, int filmeCampo)
 {
   FILE *file;
   FILE *tempFile;
@@ -191,7 +192,7 @@ void update(int filmeIndex, int filmeCampo)
   rename("replace.tmp", "allyticket.txt");
 }
 
-void delete(int filmeIndex)
+void deleteFilme(int filmeIndex)
 {
   FILE *file;
   FILE *tempFile;
@@ -207,7 +208,7 @@ void delete(int filmeIndex)
   while((fgets(linhaAntiga, 100, file)) != NULL) {
       count++;
       if (count != line && count != line + 1 && count != line + 2) {
-        if (line == tamanho_arquivo() - 2 && count == line - 1) {
+        if (line == tamanhoArquivo() - 2 && count == line - 1) {
           linhaAntiga[strcspn(linhaAntiga, "\n")] = 0;
         }
         fputs(linhaAntiga, tempFile);
