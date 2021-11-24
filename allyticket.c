@@ -142,6 +142,7 @@ void update(int filmeIndex, int filmeCampo)
     while ( getchar() != '\n' );
     scanf("%[^\n]", newLine);
     strcat(formatNome, newLine);
+    strcat(formatNome, "\n");
     while((fgets(linhaAntiga, 100, file)) != NULL) {
       count++;
       if (count == line) {
@@ -158,6 +159,7 @@ void update(int filmeIndex, int filmeCampo)
     while ( getchar() != '\n' );
     scanf("%[^\n]", newLine);
     strcat(formatClass, newLine);
+    strcat(formatClass, "\n");
     while((fgets(linhaAntiga, 100, file)) != NULL) {
       count++;
       if (count == line) {
@@ -174,6 +176,7 @@ void update(int filmeIndex, int filmeCampo)
     while ( getchar() != '\n' );
     scanf("%[^\n]", newLine);
     strcat(formatCategoria, newLine);
+    strcat(formatCategoria, "\n");
     while((fgets(linhaAntiga, 100, file)) != NULL) {
       count++;
       if (count == line) {

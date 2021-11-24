@@ -1,9 +1,9 @@
 Nome: Duna
 Classificacao: 16
-Categoria: Sci-Fi
+Categoria: 14
 Nome: Morbius
 Classificacao: 16
 Categoria: Ação
 Nome: Hush
-Classificacao: 16
-Categoria: Terror
+Classificação: 14
+Categoria: Drama
