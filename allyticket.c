@@ -24,25 +24,33 @@ void readSession();
 
 int main()
 {
-  printf("Você é:\n1 - Cliente;\n2 - Funcionário\n0 - Sair\nEscolha: ");
   int escolhaPerfil;
+  int escolhaAcaoCliente;
+  int escolha;
+  printf("Você é:\n1 - Cliente;\n2 - Funcionário\n0 - Sair\nEscolha: ");
   scanf("%d", &escolhaPerfil);
   while (escolhaPerfil != 0) {
     if (escolhaPerfil == 1) {
       printf("O que deseja fazer?\n1 - Ver filmes disponíveis;\n2 - Ver sessões disponíveis;\n3 - Comprar um ingresso\n0 - Sair\nEscolha: ");
-      int escolhaAcaoCliente;
       scanf("%d", &escolhaAcaoCliente);
+      if (escolhaAcaoCliente == 0) {
+          escolhaPerfil = 0;
+      }
       while (escolhaAcaoCliente != 0) {
         if (escolhaAcaoCliente == 1) {
           readFilme();
+          break;
         }
         else if (escolhaAcaoCliente == 2) {
           readSession();
+          break;
         }
         else if (escolhaAcaoCliente == 3) {
           readSession();
           printf("Qual sessão deseja comprar?\nDigite o número da sessão: ");
+          break;
         }
+        
         else {
           printf("Nenhuma ação corresponde ao valor inserido, por favor selecione uma ação válida.\n");
         }
@@ -50,7 +58,6 @@ int main()
     }
     else if (escolhaPerfil == 2) {
       printf("Escolha o que deseja fazer:\n1 - Adicionar um filme à lista;\n2 - Visualizar todos os filmes\n3 - Editar um filme\n4 - Excluir um filme\n0 - Sair\nEscolha: ");
-      int escolha;
       scanf("%d", &escolha);
       while (escolha != 0) {
         if (escolha == 1) {
@@ -116,7 +123,7 @@ int tamanhoArquivo() {
   char linha[102];
   int tamanho = 0;
   FILE *file;
-  file = fopen("allyticket.txt", "r");
+  file = fopen(MOVIE_FILE, "r");
   while (!feof(file)) {
     fgets(linha, 100, file);
     tamanho++;
@@ -127,7 +134,7 @@ int tamanhoArquivo() {
 void createFilme(Filme *nomeFilme)
 {
   FILE *file;
-  file = fopen("allyticket.txt", "a");
+  file = fopen(MOVIE_FILE, "a");
   if (tamanhoArquivo() > 2) { //caso já exista algum filme no arquivo, insere um \n antes de inserir o filme
     fprintf(file, "\n");
   }
@@ -137,11 +144,6 @@ void createFilme(Filme *nomeFilme)
 void readFilme() {
   FILE *file;
   file = fopen("filmes.txt", "r");
-
-  if (file == NULL){
-    printf("Arquivo nao encontrado.\n");
-    return;
-  }
 
   char nome[52];
   char classificacao[52];
@@ -171,7 +173,7 @@ void updateFilme(int filmeIndex, int filmeCampo)
   char newLine[102];
   int count = 0;
 
-  file = fopen("allyticket.txt", "r");
+  file = fopen(MOVIE_FILE, "r");
   tempFile = fopen("replace.tmp", "w");
 
   if(filmeCampo == 1) {
@@ -225,8 +227,8 @@ void updateFilme(int filmeIndex, int filmeCampo)
   fclose(tempFile);
   fclose(file);
 
-  remove("allyticket.txt");
-  rename("replace.tmp", "allyticket.txt");
+  remove(MOVIE_FILE);
+  rename("replace.tmp", MOVIE_FILE);
 }
 
 void deleteFilme(int filmeIndex)
@@ -239,7 +241,7 @@ void deleteFilme(int filmeIndex)
   char linhaAntiga[102];
   int count = 0;
 
-  file = fopen("allyticket.txt", "r");
+  file = fopen(MOVIE_FILE, "r");
   tempFile = fopen("replace.tmp", "w");
 
   while((fgets(linhaAntiga, 100, file)) != NULL) {
@@ -255,8 +257,8 @@ void deleteFilme(int filmeIndex)
   fclose(tempFile);
   fclose(file);
 
-  remove("allyticket.txt");
-  rename("replace.tmp", "allyticket.txt");
+  remove(MOVIE_FILE);
+  rename("replace.tmp", MOVIE_FILE);
 }
 
 void readSession() {
