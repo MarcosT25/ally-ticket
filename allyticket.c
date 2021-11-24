@@ -11,6 +11,7 @@ struct filme
   char *nome;
   char *classificacao;
   char *categoria;
+  char *duracao;
 };
 
 typedef struct filme Filme;
@@ -26,7 +27,7 @@ int main()
 {
   int escolhaPerfil;
   int escolhaAcaoCliente;
-  int escolha;
+  int escolhaAcaoFuncionario;
   printf("Você é:\n1 - Cliente;\n2 - Funcionário\n0 - Sair\nEscolha: ");
   scanf("%d", &escolhaPerfil);
   while (escolhaPerfil != 0) {
@@ -58,9 +59,12 @@ int main()
     }
     else if (escolhaPerfil == 2) {
       printf("Escolha o que deseja fazer:\n1 - Adicionar um filme à lista;\n2 - Visualizar todos os filmes\n3 - Editar um filme\n4 - Excluir um filme\n0 - Sair\nEscolha: ");
-      scanf("%d", &escolha);
-      while (escolha != 0) {
-        if (escolha == 1) {
+      scanf("%d", &escolhaAcaoFuncionario);
+      if (escolhaAcaoFuncionario == 0) {
+          escolhaPerfil = 0;
+      }
+      while (escolhaAcaoFuncionario != 0) {
+        if (escolhaAcaoFuncionario == 1) {
           Filme filme;
           char nome[52];
           printf("Digite o nome do filme a ser inserido: ");
@@ -77,24 +81,29 @@ int main()
           while ( getchar() != '\n' );
           scanf("%[^\n]", categoria);
           filme.categoria = categoria;
+          char duracao[52];
+          printf("Digite a duração do filme: ");
+          while ( getchar() != '\n' );
+          scanf("%[^\n]", duracao);
+          filme.duracao = duracao;
           Filme *filmePtr = &filme;
           createFilme(filmePtr);
         }
-        else if (escolha == 2) {
+        else if (escolhaAcaoFuncionario == 2) {
           readFilme();
         }
-        else if (escolha == 3) {
+        else if (escolhaAcaoFuncionario == 3) {
           printf("Os filmes disponíveis para edição e seus respectivos números são:\n");
           readFilme();
           printf("Digite o número do filme que deseja editar: ");
           int escolhaFilme;
           scanf("%d", &escolhaFilme);
-          printf("Qual campo deseja modificar?\n1 - Nome\n2 - Classificação\n3 - Categoria\nEscolha: ");
+          printf("Qual campo deseja modificar?\n1 - Nome\n2 - Classificação\n3 - Categoria\n4 - Duração\nEscolha: ");
           int escolhaCampo;
           scanf("%d", &escolhaCampo);
           updateFilme(escolhaFilme, escolhaCampo);
         }
-        else if (escolha == 4) {
+        else if (escolhaAcaoFuncionario == 4) {
           printf("Os filmes disponíveis para exclusão e seus respectivos números são:\n");
           readFilme();
           printf("Digite o número do filme que deseja excluir: ");
@@ -106,7 +115,7 @@ int main()
           printf("Nenhuma ação corresponde ao valor inserido, por favor selecione uma ação válida.\n");
         }
         printf("Escolha o que deseja fazer:\n1 - Adicionar um filme à lista;\n2 - Visualizar todos os filmes\n3 - Editar um filme\n4 - Excluir um filme\n0 - Sair\nEscolha: ");
-        scanf("%d", &escolha);
+        scanf("%d", &escolhaAcaoFuncionario);
       }
     }
     else {
@@ -138,7 +147,7 @@ void createFilme(Filme *nomeFilme)
   if (tamanhoArquivo() > 2) { //caso já exista algum filme no arquivo, insere um \n antes de inserir o filme
     fprintf(file, "\n");
   }
-  fprintf(file, "Nome: %s\nClassificacao: %s\nCategoria: %s", nomeFilme->nome, nomeFilme->classificacao, nomeFilme->categoria);
+  fprintf(file, "%s\n%s\n%s\n%s", nomeFilme->nome, nomeFilme->classificacao, nomeFilme->categoria, nomeFilme->duracao);
   fclose(file);
 }
 void readFilme() {
@@ -148,15 +157,18 @@ void readFilme() {
   char nome[52];
   char classificacao[52];
   char categoria[52];
+  char duracao[52];
   int filmeIndex = 0;
 
   while(!feof(file)) {
     fgets(nome, sizeof(nome), file);
     fgets(classificacao, sizeof(classificacao), file);
     fgets(categoria, sizeof(categoria), file);
+    fgets(duracao, sizeof(duracao), file);
     filmeIndex++;
+    duracao[strcspn(duracao, "\n")] = 0;
     printf("Filme número %d:\n", filmeIndex);
-    printf("%s%s%s", nome, classificacao, categoria);
+    printf("Nome: %sClassificação: %sCategoria: %sDuração: %smin\n", nome, classificacao, categoria, duracao);
   }  
   printf("\n");
   fclose(file);
@@ -167,7 +179,7 @@ void updateFilme(int filmeIndex, int filmeCampo)
   FILE *file;
   FILE *tempFile;
 
-  int line = (filmeIndex - 1)*3 + filmeCampo;
+  int line = (filmeIndex - 1)*4 + filmeCampo;
 
   char linhaAntiga[102];
   char newLine[102];
@@ -224,6 +236,22 @@ void updateFilme(int filmeIndex, int filmeCampo)
       }
     }
   }
+  if(filmeCampo == 4) {
+    char formatDuracao[102] = "Duração: ";
+    printf("Digite a nova duração do filme: ");
+    while ( getchar() != '\n' );
+    scanf("%[^\n]", newLine);
+    strcat(formatDuracao, newLine);
+    while((fgets(linhaAntiga, 100, file)) != NULL) {
+      count++;
+      if (count == line) {
+        fputs(formatDuracao, tempFile);
+      }
+      else {
+        fputs(linhaAntiga, tempFile);
+      }
+    }
+  }
   fclose(tempFile);
   fclose(file);
 
@@ -236,7 +264,7 @@ void deleteFilme(int filmeIndex)
   FILE *file;
   FILE *tempFile;
 
-  int line = (filmeIndex - 1)*3 + 1;
+  int line = (filmeIndex - 1)*4 + 1;
 
   char linhaAntiga[102];
   int count = 0;

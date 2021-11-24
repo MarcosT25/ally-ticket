@@ -1,9 +1,16 @@
-Nome: Duna
-Classificacao: 16
-Categoria: Sci-Fi
-Nome: Morbius
-Classificacao: 16
-Categoria: Ação
-Nome: Hush
-Classificacao: 16
-Categoria: Terror
+Duna
+16
+Sci-Fi
+155
+Morbius
+16
+Ação
+165
+Hush
+16
+Terror
+87
+Ted Bundy
+16
+Drama
+109
