@@ -36,6 +36,7 @@ void updateFilme(int filmeIndex, int filmeCampo);
 void deleteFilme(int filmeIndex);
 void createSessao(Sessao *nomeSessao);
 void readSessao();
+char * getFilmeName(int filmeIndex);
 
 int main() {
   int escolhaPerfil;
@@ -45,7 +46,7 @@ int main() {
   scanf("%d", &escolhaPerfil);
   while (escolhaPerfil != 0) {
     if (escolhaPerfil == 1) {
-      printf("O que deseja fazer?\n1 - Ver filmes disponíveis;\n2 - Ver sessões disponíveis;\n3 - Comprar um ingresso\n0 - Sair\nEscolha: ");
+      printf("\nO que deseja fazer?\n1 - Ver filmes disponíveis;\n2 - Ver sessões disponíveis;\n3 - Comprar um ingresso\n0 - Sair\nEscolha: ");
       scanf("%d", &escolhaAcaoCliente);
       if (escolhaAcaoCliente == 0) {
           escolhaPerfil = 0;
@@ -61,17 +62,17 @@ int main() {
         }
         else if (escolhaAcaoCliente == 3) {
           readSessao();
-          printf("Qual sessão deseja comprar?\nDigite o número da sessão: ");
+          printf("\nQual sessão deseja comprar?\nDigite o número da sessão: ");
           break;
         }
         
         else {
-          printf("Nenhuma ação corresponde ao valor inserido, por favor selecione uma ação válida.\n");
+          printf("\nNenhuma ação corresponde ao valor inserido, por favor selecione uma ação válida.\n");
         }
       }
     }
     else if (escolhaPerfil == 2) {
-      printf("Escolha o que deseja fazer:\n1 - Adicionar um filme à lista;\n2 - Visualizar todos os filmes\n3 - Editar um filme\n4 - Excluir um filme\n5 - Criar uma sessão\n6 - Visualizar todas as sessões\n0 - Sair\nEscolha: ");
+      printf("\nEscolha o que deseja fazer:\n1 - Adicionar um filme à lista;\n2 - Visualizar todos os filmes\n3 - Editar um filme\n4 - Excluir um filme\n5 - Criar uma sessão\n6 - Visualizar todas as sessões\n0 - Sair\nEscolha: ");
       scanf("%d", &escolhaAcaoFuncionario);
       if (escolhaAcaoFuncionario == 0) {
           escolhaPerfil = 0;
@@ -126,11 +127,12 @@ int main() {
         }
         else if(escolhaAcaoFuncionario == 5) {
           Sessao sessao;
-          char nomeFilme[52];
-          printf("Digite o nome do filme a ser inserido: ");
-          while ( getchar() != '\n' );
-          scanf("%[^\n]", nomeFilme);
-          sessao.filme = nomeFilme;
+          printf("Os filmes disponíveis para criar uma sessão e seus respectivos números são:\n");
+          readFilme();
+          printf("Digite o número do filme que deseja criar uma sessão: ");
+          int escolhaFilme;
+          scanf("%d", &escolhaFilme);
+          sessao.filme = getFilmeName(escolhaFilme);
           char sala[5];
           printf("Digite o número da sala dessa sessão (opções: sala 1, 2 ou 3): ");
           while ( getchar() != '\n' );
@@ -164,12 +166,12 @@ int main() {
         else {
           printf("Nenhuma ação corresponde ao valor inserido, por favor selecione uma ação válida.\n");
         }
-        printf("Escolha o que deseja fazer:\n1 - Adicionar um filme à lista;\n2 - Visualizar todos os filmes\n3 - Editar um filme\n4 - Excluir um filme\n5 - Criar uma sessão\n6 - Visualizar todas as sessões\n0 - Sair\nEscolha: ");
+        printf("\nEscolha o que deseja fazer:\n1 - Adicionar um filme à lista;\n2 - Visualizar todos os filmes\n3 - Editar um filme\n4 - Excluir um filme\n5 - Criar uma sessão\n6 - Visualizar todas as sessões\n0 - Sair\nEscolha: ");
         scanf("%d", &escolhaAcaoFuncionario);
       }
     }
     else {
-      printf("Nenhuma ação corresponde ao valor inserido, por favor selecione uma ação válida.\n");
+      printf("\nNenhuma ação corresponde ao valor inserido, por favor selecione uma ação válida.\n");
       printf("Você é:\n1 - Cliente;\n2 - Funcionário\n0 - Sair\nEscolha: ");
       scanf("%d", &escolhaPerfil);
     }
@@ -217,10 +219,9 @@ void readFilme() {
     fgets(duracao, sizeof(duracao), file);
     filmeIndex++;
     duracao[strcspn(duracao, "\n")] = 0;
-    printf("Filme número %d:\n", filmeIndex);
+    printf("\nFilme número %d:\n", filmeIndex);
     printf("Nome: %sClassificação: %sCategoria: %sDuração: %s min\n", nome, classificacao, categoria, duracao);
   }  
-  printf("\n");
   fclose(file);
 }
 
@@ -365,9 +366,30 @@ void readSessao() {
     fgets(horario, sizeof(horario), file);
     fgets(valor, sizeof(valor), file);
     sessaoIndex++;
-    printf("Sessão número %d:\n", sessaoIndex);
+    printf("\nSessão número %d:\n", sessaoIndex);
     printf("%sSala número: %sAssentos disponíveis: %sHorário: %sValor do ingresso: %s", filme, sala, lugares, horario, valor);
   }  
   printf("\n");
   fclose(file);
+}
+
+char * getFilmeName(int filmeIndex){
+  FILE *file;
+  file = fopen(MOVIE_FILE, "r");
+
+  int line = ((filmeIndex - 1) * 4) + 1;
+  char *nomeFilme;
+  char linhaAtual[102];
+  int count = 0;
+
+  while((fgets(linhaAtual, 100, file)) != NULL){
+    count++;
+    if(count == line){
+      fgets(nomeFilme, 52, file);
+    }
+  }
+  // nomeFilme[strcspn(nomeFilme, "\n")] = 0;
+
+  fclose(file);
+  return nomeFilme;
 }
