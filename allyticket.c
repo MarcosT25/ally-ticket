@@ -29,7 +29,7 @@ struct sessao {
 
 typedef struct sessao Sessao;
 
-int tamanhoArquivo();
+int tamanhoArquivo(char *arquivo);
 void createFilme(Filme *nomeFilme);
 void readFilme();
 void updateFilme(int filmeIndex, int filmeCampo);
@@ -132,9 +132,9 @@ int main() {
           printf("Digite o número do filme que deseja criar uma sessão: ");
           int escolhaFilme;
           scanf("%d", &escolhaFilme);
-          sessao.filme = getFilmeName(escolhaFilme);
+          strcpy(sessao.filme, getFilmeName(escolhaFilme));
           char sala[5];
-          printf("Digite o número da sala dessa sessão (opções: sala 1, 2 ou 3): ");
+          printf("Digite o número da sala dessa sessão:\nSala 1;\nSala 2;\nSala 3\nEscolha: ");
           while ( getchar() != '\n' );
           scanf("%[^\n]", sala);
           sessao.sala = sala;
@@ -180,11 +180,11 @@ int main() {
   
 }
 
-int tamanhoArquivo() {
+int tamanhoArquivo(char *arquivo) {
   char linha[102];
   int tamanho = 0;
   FILE *file;
-  file = fopen(MOVIE_FILE, "r");
+  file = fopen(arquivo, "r");
   while (!feof(file)) {
     fgets(linha, 100, file);
     tamanho++;
@@ -192,11 +192,10 @@ int tamanhoArquivo() {
   return tamanho;
 }
 
-void createFilme(Filme *nomeFilme)
-{
+void createFilme(Filme *nomeFilme) {
   FILE *file;
   file = fopen(MOVIE_FILE, "a");
-  if (tamanhoArquivo() > 2) { //caso já exista algum filme no arquivo, insere um \n antes de inserir o filme
+  if (tamanhoArquivo(MOVIE_FILE) > 2) { //caso já exista algum filme no arquivo, insere um \n antes de inserir o filme
     fprintf(file, "\n");
   }
   fprintf(file, "%s\n%s\n%s\n%s", nomeFilme->nome, nomeFilme->classificacao, nomeFilme->categoria, nomeFilme->duracao);
@@ -225,8 +224,7 @@ void readFilme() {
   fclose(file);
 }
 
-void updateFilme(int filmeIndex, int filmeCampo)
-{
+void updateFilme(int filmeIndex, int filmeCampo) {
   FILE *file;
   FILE *tempFile;
 
@@ -288,7 +286,7 @@ void updateFilme(int filmeIndex, int filmeCampo)
     printf("Digite a nova duração do filme: ");
     while ( getchar() != '\n' );
     scanf("%[^\n]", newLine);
-    if (line != tamanhoArquivo()) {
+    if (line != tamanhoArquivo(MOVIE_FILE)) {
       strcat(newLine, "\n");
     }
     while((fgets(linhaAntiga, 100, file)) != NULL) {
@@ -308,8 +306,7 @@ void updateFilme(int filmeIndex, int filmeCampo)
   rename("replace.tmp", MOVIE_FILE);
 }
 
-void deleteFilme(int filmeIndex)
-{
+void deleteFilme(int filmeIndex) {
   FILE *file;
   FILE *tempFile;
 
@@ -324,7 +321,7 @@ void deleteFilme(int filmeIndex)
   while((fgets(linhaAntiga, 100, file)) != NULL) {
       count++;
       if (count != line && count != line + 1 && count != line + 2) {
-        if (line == tamanhoArquivo() - 2 && count == line - 1) {
+        if (line == tamanhoArquivo(MOVIE_FILE) - 2 && count == line - 1) {
           linhaAntiga[strcspn(linhaAntiga, "\n")] = 0;
         }
         fputs(linhaAntiga, tempFile);
@@ -341,7 +338,7 @@ void deleteFilme(int filmeIndex)
 void createSessao(Sessao *nomeSessao){
   FILE *file;
   file = fopen(SESSION_FILE, "a");
-  if (tamanhoArquivo() > 2) { //caso já exista algum filme no arquivo, insere um \n antes de inserir o filme
+  if (tamanhoArquivo(SESSION_FILE) > 2) { //caso já exista alguma sessao no arquivo, insere um \n antes de inserir a sessao
     fprintf(file, "\n");
   }
   fprintf(file, "%s\n%s\n%s\n%s\n%s", nomeSessao->filme, nomeSessao->sala, nomeSessao->lugares, nomeSessao->horario, nomeSessao->valor);
@@ -373,23 +370,23 @@ void readSessao() {
   fclose(file);
 }
 
-char * getFilmeName(int filmeIndex){
+char *getFilmeName(int filmeIndex){
   FILE *file;
   file = fopen(MOVIE_FILE, "r");
 
   int line = ((filmeIndex - 1) * 4) + 1;
-  char *nomeFilme;
-  char linhaAtual[102];
+  char nomeFilme[52];
+  char *filmePtr;
   int count = 0;
 
-  while((fgets(linhaAtual, 100, file)) != NULL){
+  while((fgets(nomeFilme, sizeof(nomeFilme), file)) != NULL){
     count++;
     if(count == line){
-      fgets(nomeFilme, 52, file);
+      nomeFilme[strcspn(nomeFilme, "\n")] = 0;
+      break;
     }
   }
-  // nomeFilme[strcspn(nomeFilme, "\n")] = 0;
-
   fclose(file);
-  return nomeFilme;
+  filmePtr = nomeFilme;
+  return filmePtr;
 }
