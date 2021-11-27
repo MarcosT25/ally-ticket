@@ -39,6 +39,10 @@ void readSessao();
 void updateSessao(int sessaoIndex, int sessaoCampo);
 void deleteSessao(int sessaoIndex);
 char *getFilmeName(int filmeIndex);
+void replacechar(char *str, char orig, char rep);
+char *getSessaoFilme(int sessaoIndex);
+double getSessaoPreco(int sessaoIndex);
+void realizarVenda(int numeroIngressos, int sessaoIndex);
 
 int main() {
   int escolhaPerfil;
@@ -65,6 +69,15 @@ int main() {
         else if (escolhaAcaoCliente == 3) {
           readSessao();
           printf("Qual sessão deseja comprar?\nDigite o número da sessão: ");
+          int escolhaSessao;
+          scanf("%d", &escolhaSessao);
+          printf("Quantos ingressos deseja comprar? ");
+          int numeroIngressos;
+          scanf("%d", &numeroIngressos);
+          char nomeFilme[50];
+          strcpy(nomeFilme, getSessaoFilme(escolhaSessao));
+          printf("O valor total da compra de %d ingressos para assistir %s é: R$%.2f\n", numeroIngressos, nomeFilme, getSessaoPreco(escolhaSessao) * numeroIngressos);
+
           break;
         }
         
@@ -386,7 +399,7 @@ void readSessao() {
     fgets(valor, sizeof(valor), file);
     sessaoIndex++;
     printf("Sessão número %d:\n", sessaoIndex);
-    printf("%sSala %sAssentos disponíveis: %sHorário: %sValor do ingresso: %s", filme, sala, lugares, horario, valor);
+    printf("%sSala %sAssentos disponíveis: %sHorário: %sValor do ingresso: R$%s", filme, sala, lugares, horario, valor);
   }  
   printf("\n");
   fclose(file);
@@ -544,4 +557,51 @@ char *getFilmeName(int filmeIndex){
   fclose(file);
   filmePtr = nomeFilme;
   return filmePtr;
+}
+
+void replacechar(char *str, char orig, char rep) {
+  char *ix = str;
+  while((ix = strchr(ix, orig)) != NULL) {
+    *ix++ = rep;
+  }
+}
+
+char *getSessaoFilme(int sessaoIndex) {
+  FILE *file;
+  file = fopen(SESSION_FILE, "r");
+
+  int line = ((sessaoIndex - 1) * 5) + 1;
+  char nomeFilme[52];
+  char *filmePtr;
+  int count = 0;
+
+  while((fgets(nomeFilme, sizeof(nomeFilme), file)) != NULL){
+    count++;
+    if(count == line){
+      nomeFilme[strcspn(nomeFilme, "\n")] = 0;
+      break;
+    }
+  }
+  fclose(file);
+  filmePtr = nomeFilme;
+  return filmePtr;
+}
+
+double getSessaoPreco(int sessaoIndex) {
+  FILE *file;
+  file = fopen(SESSION_FILE, "r");
+  int count = 0;
+  char linhaAtual[100];
+  char *dptr;
+  while(fgets(linhaAtual, sizeof(linhaAtual), file) != NULL) {
+    count++;
+    if (count == sessaoIndex * 5) {
+      linhaAtual[strcspn(linhaAtual, "\n")] = 0;
+      replacechar(linhaAtual, ',', '.');
+      break;
+    }
+  }
+  fclose(file);
+  double price = strtod(linhaAtual, &dptr);
+  return price;
 }
