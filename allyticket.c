@@ -77,6 +77,14 @@ int main() {
           char nomeFilme[50];
           strcpy(nomeFilme, getSessaoFilme(escolhaSessao));
           printf("O valor total da compra de %d ingressos para assistir %s é: R$%.2f\n", numeroIngressos, nomeFilme, getSessaoPreco(escolhaSessao) * numeroIngressos);
+          printf("Como deseja realizar o pagamento?\n1 - Cartão de débito/crédito\n2 - Dinheiro\nOpção: ");
+          int escolhaPagamento;
+          scanf("%d", &escolhaPagamento);
+          while (escolhaPagamento != 1 && escolhaPagamento != 2) {
+            printf("Opção inválida. Escolha uma opção possível.\n");
+            printf("Como deseja realizar o pagamento?\n1 - Cartão de débito/crédito\n2 - Dinheiro\nOpção: ");
+            scanf("%d", &escolhaPagamento);
+          }
           realizarVenda(numeroIngressos, escolhaSessao);
           printf("Compra realizada com sucesso, divirta-se!\n");
           break;
@@ -118,9 +126,11 @@ int main() {
           filme.duracao = duracao;
           Filme *filmePtr = &filme;
           createFilme(filmePtr);
+          break;
         }
         else if (escolhaAcaoFuncionario == 2) {
           readFilme();
+          break;
         }
         else if (escolhaAcaoFuncionario == 3) {
           printf("Os filmes disponíveis para edição e seus respectivos números são:\n");
@@ -132,6 +142,7 @@ int main() {
           int escolhaCampo;
           scanf("%d", &escolhaCampo);
           updateFilme(escolhaFilme, escolhaCampo);
+          break;
         }
         else if (escolhaAcaoFuncionario == 4) {
           printf("Os filmes disponíveis para exclusão e seus respectivos números são:\n");
@@ -140,6 +151,7 @@ int main() {
           int escolhaFilme;
           scanf("%d", &escolhaFilme);
           deleteFilme(escolhaFilme);
+          break;
         }
         else if(escolhaAcaoFuncionario == 5) {
           Sessao sessao;
@@ -175,9 +187,11 @@ int main() {
           sessao.valor = valor;
           Sessao *sessaoPtr = &sessao;
           createSessao(sessaoPtr);
+          break;
         } 
         else if (escolhaAcaoFuncionario == 6) {
           readSessao();
+          break;
         }
         else if (escolhaAcaoFuncionario == 7) {
           printf("As sessões disponíveis para edição e seus respectivos números são:\n");
@@ -189,6 +203,7 @@ int main() {
           int escolhaCampo;
           scanf("%d", &escolhaCampo);
           updateSessao(escolhaSessao, escolhaCampo);
+          break;
         }
         else if (escolhaAcaoFuncionario == 8) {
           printf("As sessões disponíveis para exclusão e seus respectivos números são:\n");
@@ -197,6 +212,7 @@ int main() {
           int escolhaSessao;
           scanf("%d", &escolhaSessao);
           deleteSessao(escolhaSessao);
+          break;
         }
         else {
           printf("Nenhuma ação corresponde ao valor inserido, por favor selecione uma ação válida.\n");
@@ -211,8 +227,6 @@ int main() {
       scanf("%d", &escolhaPerfil);
     }
   }
-
-  
 }
 
 int tamanhoArquivo(char *arquivo) {
