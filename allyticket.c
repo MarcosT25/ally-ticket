@@ -77,7 +77,8 @@ int main() {
           char nomeFilme[50];
           strcpy(nomeFilme, getSessaoFilme(escolhaSessao));
           printf("O valor total da compra de %d ingressos para assistir %s é: R$%.2f\n", numeroIngressos, nomeFilme, getSessaoPreco(escolhaSessao) * numeroIngressos);
-
+          realizarVenda(numeroIngressos, escolhaSessao);
+          printf("Compra realizada com sucesso, divirta-se!\n");
           break;
         }
         
@@ -592,7 +593,6 @@ double getSessaoPreco(int sessaoIndex) {
   file = fopen(SESSION_FILE, "r");
   int count = 0;
   char linhaAtual[100];
-  char *dptr;
   while(fgets(linhaAtual, sizeof(linhaAtual), file) != NULL) {
     count++;
     if (count == sessaoIndex * 5) {
@@ -602,6 +602,42 @@ double getSessaoPreco(int sessaoIndex) {
     }
   }
   fclose(file);
-  double price = strtod(linhaAtual, &dptr);
+  char *endPtr;
+  double price = strtod(linhaAtual, &endPtr);
   return price;
+}
+
+void realizarVenda(int numeroIngressos, int sessaoIndex) {
+  FILE *file;
+  FILE *tempFile;
+
+  int line = ((sessaoIndex - 1) * 5) + 3;
+
+  char linhaAntiga[102];
+  char newLine[10];
+  int count = 0;
+
+  file = fopen(SESSION_FILE, "r");
+  tempFile = fopen("replace.tmp", "w");
+
+  while (fgets(linhaAntiga, sizeof(linhaAntiga), file) != NULL) {
+    count++;
+    if (count == line) {
+      char *endPtr;
+      int quantidadeAtual = strtol(linhaAntiga, &endPtr, 10); //function to convert string to int in base 10
+      quantidadeAtual -= numeroIngressos;
+      sprintf(newLine, "%d", quantidadeAtual); //function to convert int to string in base 10
+      strcat(newLine, "\n");
+      fputs(newLine, tempFile);
+    }
+    else {
+      fputs(linhaAntiga, tempFile);
+    }
+  }
+
+  fclose(tempFile);
+  fclose(file);
+
+  remove(SESSION_FILE);
+  rename("replace.tmp", SESSION_FILE);
 }
