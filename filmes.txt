@@ -1,12 +1,9 @@
-Duna
-16
-Sci-Fi
-155
-Morbius
-16
-Ação
-165
-Hush
-16
-Terror
-88
+Nome: Duna
+Classificacao: 16
+Categoria: 14
+Nome: Morbius
+Classificacao: 16
+Categoria: Ação
+Nome: Hush
+Classificação: 14
+Categoria: Drama
