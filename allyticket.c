@@ -36,6 +36,7 @@ void updateFilme(int filmeIndex, int filmeCampo);
 void deleteFilme(int filmeIndex);
 void createSessao(Sessao *nomeSessao);
 void readSessao();
+void updateSessao(int filmeIndex, int filmeCampo);
 char * getFilmeName(int filmeIndex);
 
 int main() {
@@ -72,7 +73,7 @@ int main() {
       }
     }
     else if (escolhaPerfil == 2) {
-      printf("\nEscolha o que deseja fazer:\n1 - Adicionar um filme à lista;\n2 - Visualizar todos os filmes\n3 - Editar um filme\n4 - Excluir um filme\n5 - Criar uma sessão\n6 - Visualizar todas as sessões\n0 - Sair\nEscolha: ");
+      printf("\nEscolha o que deseja fazer:\n1 - Adicionar um filme à lista;\n2 - Visualizar todos os filmes\n3 - Editar um filme\n4 - Excluir um filme\n5 - Criar uma sessão\n6 - Visualizar todas as sessões\n7 - Editar uma sessão\n0 - Sair\nEscolha: ");
       scanf("%d", &escolhaAcaoFuncionario);
       if (escolhaAcaoFuncionario == 0) {
           escolhaPerfil = 0;
@@ -163,10 +164,21 @@ int main() {
         else if (escolhaAcaoFuncionario == 6) {
           readSessao();
         }
+        else if(escolhaAcaoFuncionario == 7) {
+          printf("As sessões disponíveis para edição e seus respectivos números são:\n");
+          readSessao();
+          printf("\nDigite o número da sessão que deseja editar: ");
+          int escolhaSessao;
+          scanf("%d", &escolhaSessao);
+          printf("Qual campo deseja modificar?\n1 - Filme\n2 - Sala\n3 - Horário\n4 - Preço do ingresso\nEscolha: ");
+          int escolhaCampo;
+          scanf("%d", &escolhaCampo);
+          updateSessao(escolhaSessao, escolhaCampo);
+        }
         else {
           printf("Nenhuma ação corresponde ao valor inserido, por favor selecione uma ação válida.\n");
         }
-        printf("\nEscolha o que deseja fazer:\n1 - Adicionar um filme à lista;\n2 - Visualizar todos os filmes\n3 - Editar um filme\n4 - Excluir um filme\n5 - Criar uma sessão\n6 - Visualizar todas as sessões\n0 - Sair\nEscolha: ");
+        printf("\nEscolha o que deseja fazer:\n1 - Adicionar um filme à lista;\n2 - Visualizar todos os filmes\n3 - Editar um filme\n4 - Excluir um filme\n5 - Criar uma sessão\n6 - Visualizar todas as sessões\n7 - Editar uma sessão\n0 - Sair\nEscolha: ");
         scanf("%d", &escolhaAcaoFuncionario);
       }
     }
@@ -368,6 +380,110 @@ void readSessao() {
   }  
   printf("\n");
   fclose(file);
+}
+
+void updateSessao(int filmeIndex, int filmeCampo){
+  FILE *file;
+  FILE *tempFile;
+
+  int line = (filmeIndex - 1)*5 + filmeCampo;
+
+  char linhaAntiga[102];
+  char newLine[102];
+  int count = 0;
+
+  file = fopen(SESSION_FILE, "r");
+  tempFile = fopen("replace.tmp", "w");
+
+  if(filmeCampo == 1) {
+    printf("Os filmes disponíveis para sessão são: ");
+    readFilme();
+    printf("Digite o número do filme que deseja: ");
+    int numeroFilme;
+    scanf("%d", &numeroFilme);
+    strcpy(newLine, getFilmeName(numeroFilme));
+    strcat(newLine, "\n");
+    while((fgets(linhaAntiga, 100, file)) != NULL) {
+      count++;
+      if (count == line) {
+        fputs(newLine, tempFile);
+      }
+      else {
+        fputs(linhaAntiga, tempFile);
+      }
+    }
+  }
+  if(filmeCampo == 2) {
+    printf("Digite a nova sala da sessão: ");
+    while (getchar() != '\n');
+    scanf("%[^\n]", newLine);
+    strcat(newLine, "\n");
+    while((fgets(linhaAntiga, 100, file)) != NULL) {
+      count++;
+      if (count == line) {
+        fputs(newLine, tempFile);
+        if(strcmp(newLine, "1\n") == 0){
+          fputs(ROOM_1_START, tempFile);
+          fputs("\n", tempFile);
+          count++;
+          fgets(linhaAntiga, 102, file);
+        }
+        else if(strcmp(newLine, "2\n") == 0){
+          fputs(ROOM_2_START, tempFile);
+          fputs("\n", tempFile);
+          count++;
+          fgets(linhaAntiga, 102, file);
+        }
+        else if(strcmp(newLine, "3\n") == 0){
+          fputs(ROOM_3_START, tempFile);
+          fputs("\n", tempFile);
+          count++;
+          fgets(linhaAntiga, 102, file);
+        }
+      }
+      else {
+        fputs(linhaAntiga, tempFile);
+      }
+    }
+  }
+  if(filmeCampo == 3) {
+    printf("Digite o novo horário da sessão: ");
+    while ( getchar() != '\n' );
+    scanf("%[^\n]", newLine);
+    strcat(newLine, "\n");
+    while((fgets(linhaAntiga, 100, file)) != NULL) {
+      count++;
+      if (count == line + 1) {
+        fputs(newLine, tempFile);
+      }
+      else {
+        fputs(linhaAntiga, tempFile);
+      }
+    }
+  }
+  if(filmeCampo == 4) {
+    printf("Digite o novo preço da sessão: ");
+    while ( getchar() != '\n' );
+    scanf("%[^\n]", newLine);
+    if((line + 1) != tamanhoArquivo(SESSION_FILE)) {
+      strcat(newLine, "\n");
+    }
+    while((fgets(linhaAntiga, 100, file)) != NULL) {
+      count++;
+      if (count == line + 1) {
+        fputs(newLine, tempFile);
+      }
+      else {
+        fputs(linhaAntiga, tempFile);
+      }
+    }
+  }
+
+  fclose(tempFile);
+  fclose(file);
+
+  remove(SESSION_FILE);
+  rename("replace.tmp", SESSION_FILE);
 }
 
 char *getFilmeName(int filmeIndex){
