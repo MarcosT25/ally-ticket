@@ -12,7 +12,7 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As funções da versão 1.0 do sistema entregue no dia 07/11/2021 permitem a criação, visualização, atualização e exclusão de filmes em um registro de arquivos. 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A versão final 2.0 a ser entregue no dia 24/11/2021 contemplarão o CRUD de administração de sessões e ingressos do usuário. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A versão final 2.0 entregue no dia 27/11/2021 permitem a manutenção so CRUD de administração de sessões e venda de ingressos diretamente ao usuário. 
 
 
 ### Acompanhamento do projeto
@@ -20,12 +20,14 @@
 Funções:
 
 - [x] CRUD de administração de filmes.
-- [ ] CRUD de administração de sessões.
-- [ ] CRUD de ingressos do usuário.
+- [x] CRUD de administração de sessões.
+- [x] Venda de ingressos ao usuário.
 
 ### Instruções para compilação e execução
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Para compilar e executar o programa, siga os seguintes passos:
+
+#### Ambiente Windows
 
 1. Compilar o arquivo .c
 
@@ -37,4 +39,18 @@ gcc allyticket.c -o allyticket.exe
 
 ```bash
 ./allyticket.exe
+```
+
+#### Ambiente Linux/Mac
+
+1. Compilar o arquivo .c
+
+```bash
+gcc allyticket.c -o allyticket.out
+```
+
+2. Executar 
+
+```bash
+./allyticket.out
 ```
